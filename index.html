@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timetable Editor — Iqra Roza Tul Quran Model School</title>
+
+  <!-- ── Editor UI Styles ── -->
+  <link rel="stylesheet" href="css/editor.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════
+       TOOLBAR
+       ══════════════════════════════════════════════ -->
+  <div class="toolbar">
+    <button class="btn-toggle" id="panel-toggle-btn" onclick="togglePanel()" title="Toggle panel">
+      <span id="toggle-icon">☰</span>
+    </button>
+    <div class="toolbar-sep-v"></div>
+    <span class="toolbar-title">📋 Timetable Editor</span>
+    <div class="toolbar-sep-v"></div>
+    <button class="btn btn-green" onclick="addRow()">＋ <span class="btn-label">Add Row</span></button>
+    <button class="btn btn-green" onclick="addColumn()">＋ <span class="btn-label">Add Column</span></button>
+    <div class="toolbar-right">
+      <button class="btn btn-outline" onclick="saveToFile()" title="Save JSON">
+        💾 <span class="btn-label">Save</span>
+      </button>
+      <button class="btn btn-outline" onclick="document.getElementById('loadFile').click()" title="Load JSON">
+        📂 <span class="btn-label">Load</span>
+      </button>
+      <input type="file" id="loadFile" accept=".json" style="display:none" onchange="loadFromFile(event)">
+      <div class="toolbar-sep-v"></div>
+      <button class="btn btn-outline" onclick="window.print()" title="Print">
+        🖨️ <span class="btn-label">Print</span>
+      </button>
+      <button class="btn btn-gold" onclick="showExportModal()">
+        ⬇ <span class="btn-label">Export HTML</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile panel overlay -->
+  <div class="panel-overlay" id="panel-overlay" onclick="togglePanel()"></div>
+
+  <!-- ══════════════════════════════════════════════
+       WORKSPACE
+       ══════════════════════════════════════════════ -->
+  <div class="workspace">
+
+    <!-- ── SIDE PANEL ── -->
+    <div class="side-panel" id="side-panel">
+
+      <!-- Layout & Theme Picker -->
+      <div class="panel-section">
+        <div class="panel-label">🎨 Layout &amp; Theme</div>
+        <div class="theme-grid" id="theme-grid"></div>
+      </div>
+
+      <!-- School Info -->
+      <div class="panel-section">
+        <div class="panel-label">School Info</div>
+
+        <div class="form-group">
+          <label>School Name</label>
+          <input type="text" id="cfg-school"
+            value="Iqra Roza Tul Quran Model School"
+            oninput="onCfgChange()">
+        </div>
+
+        <div class="form-group">
+          <label>Subtitle</label>
+          <input type="text" id="cfg-subtitle"
+            value="Academic Examination Schedule"
+            oninput="onCfgChange()">
+        </div>
+
+        <div class="form-group">
+          <label>Term / Badge</label>
+          <input type="text" id="cfg-badge"
+            value="Final Term 2026"
+            oninput="onCfgChange()">
+        </div>
+
+        <div class="form-group">
+          <label>Footer Note</label>
+          <input type="text" id="cfg-footer"
+            value="All exams begin at designated times · Please arrive 15 minutes early"
+            oninput="onCfgChange()">
+        </div>
+      </div>
+
+      <!-- Columns Manager -->
+      <div class="panel-section">
+        <div class="panel-label">Columns</div>
+        <div class="col-list" id="col-list"></div>
+        <button class="add-btn" onclick="addColumn()">＋ Add Column</button>
+      </div>
+
+      <!-- Rows Manager -->
+      <div class="panel-section">
+        <div class="panel-label">Class Rows</div>
+        <div class="row-list" id="row-list"></div>
+        <button class="add-btn" onclick="addRow()">＋ Add Class Row</button>
+      </div>
+
+    </div><!-- /side-panel -->
+
+    <!-- ── PREVIEW AREA ── -->
+    <div class="preview-area">
+      <div class="page" id="timetable-page">
+        <!-- Rendered dynamically by app.js → renderPage() -->
+      </div>
+    </div>
+
+  </div><!-- /workspace -->
+
+  <!-- ══════════════════════════════════════════════
+       SITE FOOTER
+       ══════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    Developed by <span class="dn">Taj Wali</span>&nbsp;&middot;&nbsp;<span class="dp">03429067901</span>
+  </footer>
+
+  <!-- ══════════════════════════════════════════════
+       EXPORT MODAL
+       ══════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="export-modal">
+    <div class="modal">
+      <h3>Export as HTML</h3>
+      <p style="font-size:13px;color:#666;line-height:1.6">
+        Downloads a clean, standalone HTML file with your chosen layout —
+        no editor UI — ready to print or share.
+      </p>
+      <div class="modal-actions">
+        <button class="btn btn-outline" style="color:#666;border-color:#ddd" onclick="closeExportModal()">
+          Cancel
+        </button>
+        <button class="btn btn-gold" onclick="exportCleanHTML()">
+          Download HTML
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ══════════════════════════════════════════════
+       SCRIPTS  (order matters: layouts first, then app)
+       ══════════════════════════════════════════════ -->
+  <script src="js/layouts.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
